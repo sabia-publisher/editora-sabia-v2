@@ -24,7 +24,7 @@ jobs:
         run: yarn
 
       - name: Ensure NuxtHub module is installed
-        run: pnpx nuxthub@latest ensure
+        run: npx nuxthub@latest ensure
 
       - name: Build application
         run: yarn build
