@@ -1,0 +1,201 @@
+---
+description: Best practices for Vue Page components and routes in Editora Sabia V2 monorepo
+globs: apps/*/app/pages/**/*.vue
+alwaysApply: false
+---
+
+# Vue Pages - Nuxt 4 Monorepo Structure
+
+This project uses **Nuxt 4 file-based routing** across three applications. Each app in `apps/*/app/pages/` defines its own routes using Vue Router under the hood.
+
+## 🏗️ **App-Specific Pages Structure**
+
+Each app has its own routing:
+- **Website** (`apps/website/app/pages/`) - Main marketing site
+- **Ecommerce** (`apps/ecommerce/app/pages/`) - Online store and checkout
+- **Editorial** (`apps/editorial/app/pages/`) - Content management system
+
+## 📋 **Page Component Rules**
+
+### **🧩 Component Patterns**
+- **ALWAYS use Composition API** with `<script setup>`
+- **ALWAYS use JavaScript**, NEVER TypeScript in page components
+- **Use shared components** from `packages/layer/components/` (auto-imported)
+- **Use shared composables** from `packages/layer/composables/` (auto-imported)
+- **Use brand colors** from Tailwind CSS configuration
+- **Add meaningful comments** that explain why, not what
+
+### **📁 File Naming Conventions**
+- **AVOID** files named `index.vue` - use route groups instead: `(home).vue`
+- **Use explicit parameter names**: `userId` over `id`, `productSlug` over `slug`, `categoryName` over `name`
+- **Use dots for flat routes**: `products.edit.vue` → `/products/edit`
+- **Use double brackets** for optional params: `[[categoryId]]`
+- **Use plus modifier** for repeatable params: `posts.[[slug]]+.vue`
+
+## 🎯 **App-Specific Examples**
+
+### **Website App** (`apps/website/app/pages/`)
+```
+app/pages/
+├── (home).vue              # Landing page: /
+├── sobre.vue               # About page: /sobre  
+├── contato.vue             # Contact: /contato
+├── blog/
+│   ├── (blog-home).vue     # Blog list: /blog
+│   ├── categoria/
+│   │   └── [categoriaId].vue # Category: /blog/categoria/fiction
+│   └── [postSlug].vue      # Post: /blog/meu-primeiro-livro
+└── [...path].vue           # 404 catch-all
+```
+
+### **Ecommerce App** (`apps/ecommerce/app/pages/`)
+```
+app/pages/
+├── (loja).vue              # Store home: /
+├── produtos/
+│   ├── (produtos-list).vue # Products: /produtos
+│   ├── categoria/
+│   │   └── [categoriaSlug].vue # Category: /produtos/categoria/ficcao
+│   └── [produtoSlug].vue   # Product: /produtos/dom-casmurro
+├── carrinho.vue            # Cart: /carrinho
+├── checkout/
+│   ├── (checkout-home).vue # Checkout: /checkout
+│   ├── pagamento.vue       # Payment: /checkout/pagamento
+│   └── confirmacao.vue     # Confirmation: /checkout/confirmacao
+├── conta/
+│   ├── (perfil).vue        # Profile: /conta
+│   ├── pedidos.vue         # Orders: /conta/pedidos
+│   └── favoritos.vue       # Wishlist: /conta/favoritos
+└── [...path].vue           # 404 catch-all
+```
+
+### **Editorial App** (`apps/editorial/app/pages/`)
+```
+app/pages/
+├── (dashboard).vue         # Dashboard: /
+├── livros/
+│   ├── (livros-list).vue   # Books list: /livros
+│   ├── novo.vue            # New book: /livros/novo
+│   ├── [livroId].vue       # Book details: /livros/123
+│   └── [livroId].editar.vue # Edit: /livros/123/editar
+├── autores/
+│   ├── (autores-list).vue  # Authors: /autores
+│   ├── novo.vue            # New author: /autores/novo
+│   └── [autorId].vue       # Author: /autores/456
+├── vendas/
+│   ├── (vendas-dashboard).vue # Sales: /vendas
+│   └── relatorios.vue      # Reports: /vendas/relatorios
+└── [...path].vue           # 404 catch-all
+```
+
+## 🛡️ **Authentication & Protection**
+
+### **Protected Routes Pattern**
+```vue
+<script setup>
+// Use shared middleware from packages/layer/middleware/
+definePageMeta({
+  middleware: 'auth' // Shared auth middleware
+})
+
+// Or inline authentication check
+const { user } = useAuth() // Shared composable
+if (!user.value) {
+  throw createError({
+    statusCode: 401,
+    statusMessage: 'Acesso negado'
+  })
+}
+</script>
+```
+
+### **Route Groups with Layouts**
+Use route groups for shared layouts:
+
+```
+app/pages/
+├── (admin).vue             # Admin layout component
+├── (admin)/
+│   ├── dashboard.vue       # /dashboard (uses admin layout)
+│   └── configuracoes.vue   # /configuracoes (uses admin layout)
+└── (public)/
+    ├── login.vue           # /login (uses public layout)
+    └── registro.vue        # /registro (uses public layout)
+```
+
+## ⚡ **Page Meta & SEO**
+
+### **SEO-Optimized Pages**
+```vue
+<script setup>
+// Use definePage for route customization
+definePage({
+  meta: {
+    title: 'Livros de Ficção - Editora Sabia',
+    description: 'Explore nossa coleção de livros de ficção brasileira',
+    keywords: 'livros, ficção, literatura brasileira'
+  }
+})
+
+// Or use Nuxt's useSeoMeta
+useSeoMeta({
+  title: 'Página do Produto',
+  description: 'Descrição do produto para SEO',
+  ogTitle: 'Produto - Editora Sabia',
+  ogDescription: 'Descrição para redes sociais',
+  ogImage: '/images/produto-og.jpg'
+})
+</script>
+```
+
+## 🎨 **Shared Components Integration**
+
+### **Auto-Imported Components**
+```vue
+<template>
+  <!-- Components from packages/layer/components/ -->
+  <div class="min-h-screen bg-slate-50">
+    <Button variant="primary" @click="handleCompra">
+      Comprar Livro
+    </Button>
+    
+    <Card class="mt-6">
+      <h2 class="text-xl font-semibold text-gray-900">
+        {{ livro.titulo }}
+      </h2>
+    </Card>
+    
+    <!-- Authentication form -->
+    <AuthLoginForm v-if="!user" />
+  </div>
+</template>
+
+<script setup>
+// Shared composables auto-imported
+const { user } = useAuth()
+const { addToCart } = useEcommerce()
+
+function handleCompra() {
+  addToCart(livro.value)
+}
+</script>
+```
+
+## 🚨 **Important Notes**
+
+1. **🎯 App-specific routing**: Each app has its own independent routing
+2. **🔄 Shared components**: Use components from `packages/layer/components/`
+3. **⚡ Auto-imports**: Composables and components are auto-imported
+4. **🎨 Brand consistency**: Use Tailwind brand colors across all apps
+5. **🔐 Authentication**: Use shared auth middleware and composables
+6. **📱 Responsive**: All pages should be mobile-first responsive
+7. **🌐 Portuguese**: Use Portuguese route names and content
+8. **🚀 Performance**: Lazy-load heavy components with `defineAsyncComponent`
+
+## 🔍 **Development Servers**
+
+- **Website**: `http://localhost:3000` (already running)
+- **Ecommerce**: `http://localhost:3001` (already running)  
+- **Editorial**: `http://localhost:3002` (already running)
+
+**Note**: Never start dev servers manually - they're already running with HMR enabled!

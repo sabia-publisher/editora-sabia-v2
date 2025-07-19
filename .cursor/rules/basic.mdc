@@ -1,0 +1,223 @@
+---
+description: Comprehensive project rules and structure guide for Editora Sabia V2
+globs: 
+alwaysApply: true
+---
+
+# Editora Sabia V2 - Unified Commerce & Content Platform
+
+## 🏗️ **Project Architecture**
+
+This is a **Nuxt 4 monorepo** using:
+- **Turborepo** for build orchestration and caching
+- **pnpm workspace** for package management 
+- **Firebase Hosting** with multi-site setup
+- **Tailwind CSS** for styling with Brazilian brand theme
+
+## 📁 **Monorepo Structure**
+
+```
+editora-sabia-v2/
+├── apps/                    # Nuxt 4 applications
+│   ├── website/            # Main website (port 3000)
+│   ├── ecommerce/          # E-commerce platform (port 3001)  
+│   └── editorial/          # Editorial CMS (port 3002)
+├── packages/               # Shared packages
+│   ├── layer/             # Shared Nuxt layer (components, composables, plugins)
+│   ├── tailwind-config/   # Shared Tailwind CSS configuration
+│   └── zod-schemas/       # Shared validation schemas
+├── .github/workflows/     # GitHub Actions CI/CD
+├── firebase.json          # Multi-site Firebase hosting config
+└── turbo.json            # Turborepo configuration
+```
+
+## 🎯 **Core Technologies**
+
+- **Framework**: Nuxt 4 (latest) with Vue 3.5+ and TypeScript support
+- **Styling**: Tailwind CSS v4 with custom brand colors and fonts
+- **Build Tool**: Turborepo for monorepo builds and dev mode
+- **Package Manager**: pnpm (version 10.13.1)
+- **Deployment**: Firebase Hosting with static site generation
+- **Authentication**: Firebase Auth with emulator support
+- **Validation**: Zod schemas for type-safe data validation
+
+## 📦 **Shared Layer (`packages/layer/`)**
+
+### **Directory Structure (example):**
+```
+packages/layer/
+├── components/           # Shared Vue components
+│   ├── Button.vue       # Base button component
+│   ├── Card.vue         # Card component  
+│   └── AuthLoginForm.vue # Firebase auth form
+├── composables/         # Shared Vue composables
+├── plugins/            # Shared Nuxt plugins (Firebase, etc.)
+├── middleware/         # Shared route middleware
+├── utils/             # Shared utility functions
+├── assets/css/        # Shared CSS (fonts, base styles)
+├── nuxt.config.js     # Layer configuration
+└── package.json
+```
+
+### **Adding Shared Code:**
+
+**🧩 Components**: Add to `packages/layer/components/`
+- Auto-imported in all apps via Nuxt layer
+- Use brand colors and Tailwind classes
+- Follow Vue 3 Composition API patterns
+- Patterns: ALWAYS use Composition API + `<script setup>`, NEVER use Options API
+- ALWAYS use only Javascript, NEVER Typescript
+- ALWAYS add unit tests to new components
+- ALWAYS update unit tests when a component is updated
+- Keep unit and integration tests alongside the file they test: `src/ui/Button.vue` + `src/ui/Button.spec.ts`
+- ALWAYS use TailwindCSS classes rather than manual CSS
+- DO NOT hard code colors, use Tailwind's color system
+- ONLY add meaningful comments that explain why something is done, not what it does
+- For Ecommerce project, Dev server is already running on `http://localhost:3000` with HMR enabled. NEVER launch it yourself
+- For Editorial project, Dev server is already running on `http://localhost:3001` with HMR enabled. NEVER launch it yourself
+- For Website project, Dev server is already running on `http://localhost:3002` with HMR enabled. NEVER launch it yourself
+- ALWAYS use named functions when declaring methods, use arrow functions only for callbacks
+- ALWAYS prefer named exports over default exports
+
+**🔧 Composables**: Add to `packages/layer/composables/`
+- Auto-imported as `use*` functions
+- Firebase auth composables: `useAuth()`, `useFirebaseUser()`
+- Business logic and state management
+
+**🔌 Plugins**: Add to `packages/layer/plugins/`
+- Firebase configuration and initialization
+- Global app setup and third-party integrations
+
+**🛡️ Middleware**: Add to `packages/layer/middleware/`
+- Authentication guards and route protection
+- Shared navigation logic
+
+**🛠️ Utils**: Add to `packages/layer/utils/`
+- Pure utility functions and helpers
+- Data transformation and formatting
+
+## 🎨 **Styling System**
+
+### **Tailwind Configuration** (`packages/tailwind-config/`)
+- **Brand Colors**: Defined in `colors.js` with Portuguese names
+- **Custom Fonts**: Imported Google Fonts (Inter, Playfair Display, etc.)
+- **Extended Spacing**: Additional spacing utilities
+- **Dark Mode**: Class-based dark mode support
+- **Custom Plugins**: Typography and component variants
+
+### **Brand Colors Available:**
+- NEVER create new colors, unless user tells you to do it
+
+## 🚀 **Development Workflow**
+
+### **Development Commands:**
+```bash
+# Start all apps in development mode
+pnpm dev
+
+# Start specific app
+pnpm dev:website    # Port 3000
+pnpm dev:ecommerce  # Port 3001  
+pnpm dev:editorial  # Port 3002
+
+# Build all apps
+pnpm build
+
+# Build specific app
+pnpm build:website
+pnpm build:ecommerce
+pnpm build:editorial
+```
+
+### **App Configuration:**
+Each app in `apps/*/nuxt.config.js`:
+- **Extends**: `'../packages/layer'` (shared layer)
+- **Modules**: `@nuxtjs/tailwindcss` with shared config
+- **Development Port**: Unique port per app (3000, 3001, 3002)
+- **Static Generation**: `nitro.preset: 'static'` + `ssr: false`
+- **Tailwind Config**: Points to `'../packages/tailwind-config'`
+
+## 🔥 **Firebase Integration**
+
+### **Multi-Site Hosting Setup:**
+- **website**: Main website hosting target
+- **ecommerce**: E-commerce platform hosting  
+- **editorial**: Editorial CMS hosting
+
+### **Environment Variables** (`.env`):
+```bash
+FIREBASE_API_KEY=your-api-key
+FIREBASE_AUTH_DOMAIN=your-domain.firebaseapp.com
+FIREBASE_PROJECT_ID=your-project-id
+FIREBASE_STORAGE_BUCKET=your-bucket.appspot.com  
+FIREBASE_MESSAGING_SENDER_ID=your-sender-id
+FIREBASE_APP_ID=your-app-id
+USE_FIREBASE_EMULATORS=true  # For development
+```
+
+### **Deployment:**
+```bash
+# Deploy all sites
+pnpm firebase:deploy
+
+# Deploy specific site  
+pnpm firebase:deploy:website
+pnpm firebase:deploy:ecommerce
+pnpm firebase:deploy:editorial
+```
+
+## 🧪 **Code Patterns & Best Practices**
+
+### **Vue Components:**
+- Use **Composition API** with `<script setup>`
+- **TypeScript** for type safety
+- **Props validation** with Zod schemas from `packages/zod-schemas/`
+- **Brand colors** and responsive Tailwind classes
+
+### **Composables Pattern:**
+```javascript
+// Example: packages/layer/composables/useAuth.js
+export const useAuth = () => {
+  const user = ref(null)
+  const loading = ref(false)
+  
+  const login = async (email, password) => {
+    // Firebase auth logic
+  }
+  
+  return { user, loading, login }
+}
+```
+
+### **Component Auto-Import:**
+All components in `packages/layer/components/` are auto-imported:
+```vue
+<!-- No import needed, available in all apps -->
+<template>
+  <Button variant="primary">Click me</Button>
+  <Card>
+    <AuthLoginForm />
+  </Card>
+</template>
+```
+
+## 🚨 **Important Notes**
+
+1. **Always use pnpm** - Project configured for pnpm workspace
+2. **Relative paths for layer**: Apps extend layer via `'../packages/layer'`
+3. **Static generation**: All apps use `nitro.preset: 'static'` for Firebase Hosting
+4. **Environment variables**: Required for Firebase integration
+5. **Port conflicts**: Each app has dedicated development port
+7. **Shared first**: Add reusable code to packages/layer before app-specific code
+
+## 🔍 **Where to Find/Add:**
+
+- **🎨 UI Components**: `packages/layer/components/`
+- **⚡ Business Logic**: `packages/layer/composables/`  
+- **🔧 App Configuration**: `apps/*/nuxt.config.js`
+- **🎨 Styling Config**: `packages/tailwind-config/`
+- **📊 Data Validation**: `packages/zod-schemas/`
+- **🔥 Firebase Config**: `packages/layer/plugins/`
+- **🚀 Deployment**: `.github/workflows/deploy.yml`
+
+This monorepo enables efficient development of three interconnected Nuxt applications with shared code, styling, and deployment infrastructure optimized for editorial market needs.

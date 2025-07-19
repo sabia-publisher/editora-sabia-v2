@@ -110,9 +110,6 @@ package-lock.json
 *.tgz
 *.tar.gz
 
-# IDE - Cursor
-.cursor/
-
 # Local database files
 *.db
 *.sqlite
