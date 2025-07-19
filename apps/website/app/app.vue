@@ -15,7 +15,7 @@
     <div class="max-w-6xl mx-auto p-8">
       <div class="text-center mb-12">
         <h1 class="text-6xl font-display font-bold text-terra dark:text-areia mb-4">
-          Editora Sabia Website
+          Editora Sabia Website v2
         </h1>
         <p class="text-xl font-body text-gray-coat dark:text-gray-light">
           Showcasing Brazilian brand colors and typography system
