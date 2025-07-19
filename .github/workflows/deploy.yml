@@ -59,13 +59,25 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
+          # Debug: Check if token exists
+          if [ -z "$FIREBASE_TOKEN" ]; then
+            echo "❌ FIREBASE_TOKEN is empty or not set"
+            echo "Please check your GitHub repository secrets"
+            exit 1
+          fi
+          
+          echo "✅ FIREBASE_TOKEN is set"
+          
           # Deploy only if there are changes to the respective apps
           if [ -n "$(git diff --name-only HEAD^1 HEAD | grep "^apps/website/")" ]; then
-            firebase deploy --only hosting:website
+            echo "🚀 Deploying website..."
+            firebase deploy --only hosting:website --token "$FIREBASE_TOKEN"
           fi
           if [ -n "$(git diff --name-only HEAD^1 HEAD | grep "^apps/ecommerce/")" ]; then
-            firebase deploy --only hosting:ecommerce
+            echo "🚀 Deploying ecommerce..."
+            firebase deploy --only hosting:ecommerce --token "$FIREBASE_TOKEN"
           fi
           if [ -n "$(git diff --name-only HEAD^1 HEAD | grep "^apps/editorial/")" ]; then
-            firebase deploy --only hosting:editorial
+            echo "🚀 Deploying editorial..."
+            firebase deploy --only hosting:editorial --token "$FIREBASE_TOKEN"
           fi 
