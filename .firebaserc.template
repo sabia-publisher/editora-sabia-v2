@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "your-firebase-project-id"
+  },
+  "targets": {
+    "your-firebase-project-id": {
+      "hosting": {
+        "website": ["editora-sabia-website"],
+        "ecommerce": ["editora-sabia-ecommerce"],
+        "editorial": ["editora-sabia-editorial"]
+      }
+    }
+  }
+} 

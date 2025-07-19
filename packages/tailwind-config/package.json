@@ -1,0 +1,9 @@
+{
+  "name": "@repo/tailwind-config",
+  "version": "1.0.0",
+  "description": "Shared Tailwind CSS configuration for the unified platform",
+  "main": "tailwind.config.js",
+  "dependencies": {
+    "@tailwindcss/forms": "^0.5.9"
+  }
+} 

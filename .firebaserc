@@ -1,0 +1,21 @@
+{
+  "projects": {
+    "editora-sabia-v2": "editora-sabia-v2"
+  },
+  "targets": {
+    "editora-sabia-v2": {
+      "hosting": {
+        "website": [
+          "editora-sabia-website"
+        ],
+        "ecommerce": [
+          "editora-sabia-ecommerce"
+        ],
+        "editorial": [
+          "editora-sabia-editorial"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

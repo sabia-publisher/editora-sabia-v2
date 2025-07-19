@@ -1,0 +1,37 @@
+{
+  "name": "editora-sabia-v2",
+  "version": "1.0.0",
+  "description": "Unified Commerce & Content Platform for Editora Sabia",
+  "main": "index.js",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "dev:ecommerce": "turbo dev --filter=@apps/ecommerce",
+    "dev:editorial": "turbo dev --filter=@apps/editorial", 
+    "dev:website": "turbo dev --filter=@apps/website",
+    "build:ecommerce": "turbo build --filter=@apps/ecommerce",
+    "build:editorial": "turbo build --filter=@apps/editorial",
+    "build:website": "turbo build --filter=@apps/website",
+    "lint": "turbo lint",
+    "firebase:deploy": "firebase deploy --only hosting",
+    "firebase:deploy:website": "firebase deploy --only hosting:website",
+    "firebase:deploy:ecommerce": "firebase deploy --only hosting:ecommerce",
+    "firebase:deploy:editorial": "firebase deploy --only hosting:editorial"
+  },
+  "keywords": [
+    "nuxt",
+    "turborepo",
+    "firebase",
+    "brazilian-brand",
+    "editora-sabia"
+  ],
+  "author": "Editora Sabia",
+  "license": "ISC",
+  "packageManager": "pnpm@10.13.1",
+  "devDependencies": {
+    "turbo": "2.5.5"
+  },
+  "dependencies": {
+    "@nuxtjs/tailwindcss": "^6.14.0"
+  }
+}
