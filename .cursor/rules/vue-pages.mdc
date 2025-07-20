@@ -166,7 +166,7 @@ useSeoMeta({
     </Card>
     
     <!-- Authentication form -->
-    <AuthLoginForm v-if="!user" />
+    <LoginForm v-if="!user" />
   </div>
 </template>
 

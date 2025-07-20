@@ -49,7 +49,7 @@ packages/layer/
 ├── components/           # Shared Vue components
 │   ├── Button.vue       # Base button component
 │   ├── Card.vue         # Card component  
-│   └── AuthLoginForm.vue # Firebase auth form
+│   └── LoginForm.vue # Firebase auth form with enhanced validation
 ├── composables/         # Shared Vue composables
 ├── plugins/            # Shared Nuxt plugins (Firebase, etc.)
 ├── middleware/         # Shared route middleware
@@ -196,7 +196,7 @@ All components in `packages/layer/components/` are auto-imported:
 <template>
   <Button variant="primary">Click me</Button>
   <Card>
-    <AuthLoginForm />
+    <LoginForm />
   </Card>
 </template>
 ```

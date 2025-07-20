@@ -5,6 +5,9 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 export default defineNuxtConfig({
+  modules: [
+    '@pinia/nuxt'
+  ],
   css: [
     // Include the fonts CSS file with absolute path
     resolve(__dirname, 'assets/css/fonts.css')
@@ -17,7 +20,8 @@ export default defineNuxtConfig({
       firebaseStorageBucket: process.env.FIREBASE_STORAGE_BUCKET,
       firebaseMessagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
       firebaseAppId: process.env.FIREBASE_APP_ID,
-      useFirebaseEmulators: process.env.USE_FIREBASE_EMULATORS === 'true'
+      useFirebaseEmulators: process.env.USE_FIREBASE_EMULATORS === 'true',
+      authCookieDomain: process.env.AUTH_COOKIE_DOMAIN || undefined
     }
   }
 }) 
