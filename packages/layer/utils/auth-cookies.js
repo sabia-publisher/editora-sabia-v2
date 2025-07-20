@@ -10,21 +10,26 @@ const getRootDomain = () => {
     // On server, get from runtime config or environment
     const config = useRuntimeConfig()
     return config.public.authCookieDomain || 
-           (process.env.NODE_ENV === 'production' ? '.editora-sabia.com' : undefined)
+           (process.env.NODE_ENV === 'production' ? '.sabia.pub' : undefined)
   }
   
   if (typeof window !== 'undefined') {
     const hostname = window.location.hostname
     
+    console.log('Cookie domain detection for hostname:', hostname)
+    
     // For localhost development
-    if (hostname === 'localhost' || hostname.includes('127.0.0.1')) {
+    if (hostname === 'localhost' || hostname.includes('127.0.0.1') || hostname.includes('3000') || hostname.includes('3001') || hostname.includes('3002')) {
+      console.log('Using localhost - no domain restriction')
       return undefined // Let browser handle localhost
     }
     
-    // For production domains like website.editora-sabia.com
+    // For production domains like v2.sabia.pub, editorial.sabia.pub, store.sabia.pub
     const parts = hostname.split('.')
     if (parts.length >= 2) {
-      return '.' + parts.slice(-2).join('.') // .editora-sabia.com
+      const rootDomain = '.' + parts.slice(-2).join('.') // .sabia.pub
+      console.log('Using root domain for cross-subdomain cookies:', rootDomain)
+      return rootDomain
     }
   }
   
@@ -84,6 +89,8 @@ export const clearAuthCookies = () => {
   const userSession = useUserSessionCookie()
   const authState = useAuthStateCookie()
   
+  console.log('Clearing auth cookies on domain:', getRootDomain())
+  
   authToken.value = null
   userSession.value = null
   authState.value = false
@@ -92,7 +99,17 @@ export const clearAuthCookies = () => {
   if (process.client) {
     localStorage.removeItem('editora-last-auth-sync')
     sessionStorage.removeItem('editora-auth-temp')
+    
+    // Trigger custom event for cross-subdomain sync
+    window.dispatchEvent(new CustomEvent('editora-auth-logout', {
+      detail: {
+        timestamp: Date.now(),
+        domain: window.location.hostname
+      }
+    }))
   }
+  
+  console.log('Auth cookies cleared successfully')
 }
 
 // Utility to set auth data in cookies
@@ -100,6 +117,8 @@ export const setAuthCookies = (user, token = null) => {
   const authToken = useAuthTokenCookie()
   const userSession = useUserSessionCookie()
   const authState = useAuthStateCookie()
+  
+  console.log('Setting auth cookies for user:', user.email, 'on domain:', getRootDomain())
   
   // Set authentication token if provided
   if (token) {
@@ -116,16 +135,28 @@ export const setAuthCookies = (user, token = null) => {
     email: user.email,
     displayName: user.displayName,
     photoURL: user.photoURL,
+    emailVerified: user.emailVerified,
     timestamp: Date.now()
   }
   
   // Set auth state
   authState.value = true
   
-  // Set sync timestamp for cross-tab communication
+  // Set sync timestamp for cross-tab and cross-subdomain communication
   if (process.client) {
     localStorage.setItem('editora-last-auth-sync', Date.now().toString())
+    
+    // Trigger custom event for cross-subdomain sync
+    window.dispatchEvent(new CustomEvent('editora-auth-login', {
+      detail: {
+        user,
+        timestamp: Date.now(),
+        domain: window.location.hostname
+      }
+    }))
   }
+  
+  console.log('Auth cookies set successfully')
 }
 
 // Utility to get auth data from cookies

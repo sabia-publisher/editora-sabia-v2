@@ -282,11 +282,14 @@ export const useUserStore = defineStore('user', () => {
     return loading.value
   })
   
-  // Watch for cookie changes and sync state
+  // Watch for cookie changes and sync state (cross-subdomain)
   if (process.client) {
     watch([authStateCookie, userSessionCookie], ([authState, userSession]) => {
+      console.log('Store: Cookie change detected', { authState, userSession, currentUser: user.value?.uid })
+      
       // Only sync if there's a meaningful change
       if (authState && userSession && userSession.uid !== user.value?.uid) {
+        console.log('Store: Syncing user from cookies (cross-subdomain login)')
         user.value = {
           uid: userSession.uid,
           email: userSession.email,
@@ -295,9 +298,33 @@ export const useUserStore = defineStore('user', () => {
           emailVerified: userSession.emailVerified || false
         }
       } else if (!authState && user.value) {
+        console.log('Store: Clearing user from cookies (cross-subdomain logout)')
         user.value = null
       }
     }, { immediate: false })
+    
+    // Listen for custom auth events from other subdomains
+    window.addEventListener('editora-auth-login', (event) => {
+      console.log('Store: Received login event from', event.detail?.domain)
+      if (event.detail?.user && event.detail.user.uid !== user.value?.uid) {
+        console.log('Store: Syncing login from other subdomain')
+        // Force cookie check to sync state
+        nextTick(() => {
+          const cookieData = getAuthFromCookies()
+          if (cookieData.isAuthenticated && cookieData.user) {
+            user.value = cookieData.user
+          }
+        })
+      }
+    })
+    
+    window.addEventListener('editora-auth-logout', (event) => {
+      console.log('Store: Received logout event from', event.detail?.domain)
+      if (user.value) {
+        console.log('Store: Syncing logout from other subdomain')
+        user.value = null
+      }
+    })
   }
   
   return {
