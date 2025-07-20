@@ -285,7 +285,7 @@ export const useUserStore = defineStore('user', () => {
   // Watch for cookie changes and sync state (cross-subdomain)
   if (process.client) {
     watch([authStateCookie, userSessionCookie], ([authState, userSession]) => {
-      console.log('Store: Cookie change detected', { authState, userSession, currentUser: user.value?.uid })
+      console.log('Store: Cookie change detected - ', { authState, userSession, currentUser: user.value?.uid })
       
       // Only sync if there's a meaningful change
       if (authState && userSession && userSession.uid !== user.value?.uid) {

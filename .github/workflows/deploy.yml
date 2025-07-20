@@ -68,16 +68,47 @@ jobs:
           
           echo "✅ FIREBASE_TOKEN is set"
           
-          # Deploy only if there are changes to the respective apps
-          if [ -n "$(git diff --name-only HEAD^1 HEAD | grep "^apps/website/")" ]; then
-            echo "🚀 Deploying website..."
+          # Check for changes in shared packages folder
+          PACKAGES_CHANGED=$(git diff --name-only HEAD^1 HEAD | grep "^packages/" || true)
+          WEBSITE_CHANGED=$(git diff --name-only HEAD^1 HEAD | grep "^apps/website/" || true)
+          ECOMMERCE_CHANGED=$(git diff --name-only HEAD^1 HEAD | grep "^apps/ecommerce/" || true)
+          EDITORIAL_CHANGED=$(git diff --name-only HEAD^1 HEAD | grep "^apps/editorial/" || true)
+          
+          # If packages folder changed, deploy all apps (since they all depend on shared code)
+          if [ -n "$PACKAGES_CHANGED" ]; then
+            echo "📦 Shared packages changed - deploying all applications..."
+            echo "Changed files in packages: $PACKAGES_CHANGED"
+            
+            echo "🚀 Deploying website (shared dependency)..."
             firebase deploy --only hosting:website --token "$FIREBASE_TOKEN"
-          fi
-          if [ -n "$(git diff --name-only HEAD^1 HEAD | grep "^apps/ecommerce/")" ]; then
-            echo "🚀 Deploying ecommerce..."
+            
+            echo "🚀 Deploying ecommerce (shared dependency)..."
             firebase deploy --only hosting:ecommerce --token "$FIREBASE_TOKEN"
-          fi
-          if [ -n "$(git diff --name-only HEAD^1 HEAD | grep "^apps/editorial/")" ]; then
-            echo "🚀 Deploying editorial..."
+            
+            echo "🚀 Deploying editorial (shared dependency)..."
             firebase deploy --only hosting:editorial --token "$FIREBASE_TOKEN"
+            
+          else
+            echo "📱 No shared package changes - checking individual apps..."
+            
+            # Deploy individual apps only if their specific folders changed
+            if [ -n "$WEBSITE_CHANGED" ]; then
+              echo "🚀 Deploying website (app-specific changes)..."
+              firebase deploy --only hosting:website --token "$FIREBASE_TOKEN"
+            fi
+            
+            if [ -n "$ECOMMERCE_CHANGED" ]; then
+              echo "🚀 Deploying ecommerce (app-specific changes)..."
+              firebase deploy --only hosting:ecommerce --token "$FIREBASE_TOKEN"
+            fi
+            
+            if [ -n "$EDITORIAL_CHANGED" ]; then
+              echo "🚀 Deploying editorial (app-specific changes)..."
+              firebase deploy --only hosting:editorial --token "$FIREBASE_TOKEN"
+            fi
+          fi
+          
+          # Summary
+          if [ -z "$PACKAGES_CHANGED" ] && [ -z "$WEBSITE_CHANGED" ] && [ -z "$ECOMMERCE_CHANGED" ] && [ -z "$EDITORIAL_CHANGED" ]; then
+            echo "ℹ️  No changes detected in apps or packages folders - no deployment needed"
           fi 
