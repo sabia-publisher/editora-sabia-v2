@@ -321,7 +321,7 @@ export const useUserStore = defineStore('user', () => {
     window.addEventListener('editora-auth-logout', (event) => {
       console.log('Store: Received logout event from', event.detail?.domain)
       if (user.value) {
-        console.log('Store: Syncing logout from other subdomain')
+        console.log('Store: Syncing logout from other subdomain...')
         user.value = null
       }
     })
