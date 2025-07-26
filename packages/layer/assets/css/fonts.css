@@ -3,15 +3,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 /* purgecss end ignore */
 
-/* 
-  Note: Local font imports would go here if the font files are available
-  @import './fonts/now.css';
-  @import './fonts/hyperlegible.css';
-  @import './fonts/faune.css';
-  @import './fonts/larken.css';
-  @import './fonts/crimson.css';
-  @import './fonts/opendyslexic.css';
-*/
+
+@import './fonts/now.css';
+@import './fonts/hyperlegible.css';
+@import './fonts/faune.css';
+@import './fonts/larken.css';
+@import './fonts/crimson.css';
+@import './fonts/opendyslexic.css';
+
 
 /* Base font application */
 html {

@@ -1,0 +1,46 @@
+@font-face {
+  font-family: 'Now';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Now'), url('now/Now-Regular.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Now';
+  font-style: normal;
+  font-weight: 200;
+  src: local('Now'), url('now/Now-Thin.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Now';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Now'), url('now/Now-Light.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Now';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Now'), url('now/Now-Medium.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Now';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Now'), url('now/Now-Bold.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Now';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Now'), url('now/Now-Black.woff') format('woff');
+}

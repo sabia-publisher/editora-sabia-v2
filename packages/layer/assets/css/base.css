@@ -1,0 +1,81 @@
+.button {
+  	@apply border-terra text-terra dark:border-canarinho dark:text-canarinho rounded-lg
+  		text-xs tracking-wide px-4 pt-3 pb-2 border-2 uppercase font-extrabold transition-all duration-300 transform;
+
+	&.button-small {
+		@apply px-3 pt-1 pb-0;
+	}
+
+	&.button-large {
+		@apply px-6 pt-2 pb-1 text-lg;
+	}
+}
+
+@screen lg {
+  .button {
+    @apply px-5;
+  }
+}
+
+@screen xl {
+  .button {
+    @apply px-6;
+  }
+}
+
+.button.button-negative {
+  @apply border-white text-white;
+}
+
+
+.button.button-laranjeira-outline {
+  @apply border-laranjeira text-black dark:text-areia;
+}
+
+.button.button-laranjeira-outline-no-left-rounded {
+  @apply border-laranjeira text-black dark:text-areia rounded-l-none;
+}
+
+.button.button-urucum-outline {
+  @apply border-urucum text-black dark:text-areia;
+}
+
+.button.button-laranjeira {
+  @apply border-laranjeira bg-laranjeira text-terra;
+}
+
+.button.button-urucum {
+  @apply border-urucum bg-laranjeira text-terra;
+}
+
+.button:hover {
+  @apply bg-terra text-white no-underline scale-105;
+}
+
+.button.button-negative:hover {
+  @apply bg-white text-black no-underline;
+}
+
+.button.button-laranjeira:hover {
+  @apply bg-transparent text-black dark:text-areia;
+}
+
+.button.button-laranjeira.hover-laranjeira:hover {
+  @apply text-laranjeira dark:text-laranjeira;
+}
+
+.button.button-laranjeira-outline:hover {
+  @apply bg-laranjeira text-black;
+}
+
+.button.button-urucum:hover {
+  @apply bg-transparent text-black dark:text-areia;
+}
+
+.button.button-urucum-outline:hover {
+  @apply bg-urucum text-black;
+}
+
+input[type=text], input[type=email], input[type=password], input[type=number], textarea {
+	@apply rounded;
+}

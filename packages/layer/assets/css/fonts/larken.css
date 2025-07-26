@@ -1,0 +1,6 @@
+@font-face {
+  font-family: 'Larken';
+  font-style: bold;
+  font-weight: 700;
+  src: local('Larken'), url('larken/ttf/LarkenBold.ttf') format('truetype');
+}

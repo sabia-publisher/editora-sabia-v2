@@ -10,7 +10,8 @@ export default defineNuxtConfig({
   ],
   css: [
     // Include the fonts CSS file with absolute path
-    resolve(__dirname, 'assets/css/fonts.css')
+    resolve(__dirname, 'assets/css/base.css'),
+    resolve(__dirname, 'assets/css/fonts.css'),
   ],
   runtimeConfig: {
     public: {

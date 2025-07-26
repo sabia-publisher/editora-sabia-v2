@@ -55,6 +55,7 @@
           @blur="validatePasswordField"
           @input="clearFieldError('password')"
         />
+  
         <button
           type="button"
           @click="togglePasswordVisibility"
@@ -103,28 +104,15 @@
 
     <!-- Actions -->
     <div class="flex justify-between items-center mb-6">
-      <button
-        type="submit"
+      <button type="submit"
+        class="button button-laranjeira-outline dark:button-urucum-outline"
         :disabled="isLoading || hasValidationErrors"
-        class="px-6 py-3 rounded-md font-medium transition-all duration-200
-               bg-transparent border-2 border-laranjeira text-laranjeira
-               hover:bg-laranjeira hover:text-white
-               dark:border-urucum dark:text-urucum
-               dark:hover:bg-urucum dark:hover:text-white
-               disabled:opacity-50 disabled:cursor-not-allowed
-               focus:ring-2 focus:ring-offset-2 focus:ring-laranjeira
-               dark:focus:ring-urucum focus:outline-none"
       >
-        <div class="flex items-center space-x-2">
-          <svg v-if="isLoading" class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          <span>{{ isLoading ? 'Entrando...' : 'Entrar' }}</span>
-        </div>
+        {{ isLoading ? 'Aguarde...' : 'Fazer login' }}
       </button>
 
       <button
+        v-if="allowRecover"
         type="button"
         @click="emitToRecover"
         :disabled="isLoading"
@@ -136,7 +124,7 @@
     </div>
 
     <!-- Register Link -->
-    <div class="text-center border-t pt-6">
+    <div v-if="allowRegister" class="text-center border-t pt-6">
       <p class="text-gray-coat dark:text-white mb-4">
         Não tem uma conta?
       </p>
@@ -195,6 +183,14 @@ const props = defineProps({
   redirectAfterLogin: {
     type: String,
     default: null
+  },
+  allowRegister: {
+    type: Boolean,
+    default: false
+  },
+  allowRecover: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -377,18 +373,4 @@ input[type="text"] {
   @apply block w-full rounded-md shadow-sm;
 }
 
-/* Disable browser autofill styling to match brand colors */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px white inset;
-  -webkit-text-fill-color: #808080; /* gray.dark from brand colors */
-}
-
-.dark input:-webkit-autofill,
-.dark input:-webkit-autofill:hover,
-.dark input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px #1f2937 inset;
-  -webkit-text-fill-color: #f9fafb;
-}
 </style> 

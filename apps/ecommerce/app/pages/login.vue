@@ -1,24 +1,30 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-      <LoginForm
-        custom-title="Loja Editora Sabia"
-        description="Acesse sua conta na loja online"
-        redirect-after-login="/"
-        @to-recover="handlePasswordRecovery"
-        @to-register="handleRegister"
-        @auth-success="handleAuthSuccess"
-        @auth-error="handleAuthError"
-      />
+  <div class="grid grid-cols-1 lg:grid-cols-2 min-h-full flex-1">
+    <div class="grid-span-1 flex flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+      <LoginForm custom-title="Login" redirect-after-login="/" @to-recover="handlePasswordRecovery"
+        @to-register="handleRegister" @auth-success="handleAuthSuccess" @auth-error="handleAuthError"
+        :allow-register="false" :allow-recover="false" />
+    </div>
+    <div class="relative hidden lg:flex w-0 grid-span-1 h-full w-full">
+      <img class="absolute inset-0 size-full object-cover" src="/images/santos-sabia.png"
+        alt="Santos Sabia - Editora Sabia" />
+      <a href="https://instagram.com/yarasantxs?igshid=1jfiaqct81t5s" target="_blank" class="absolute bottom-1 right-1 pt-1 px-2 \
+				bg-gray-800 text-sm text-areia inline-block
+				opacity-60 hover:opacity-80 transition-opacity duration-75
+				cursor-pointer rounded
+			">
+        Yara Santos
+      </a>
     </div>
   </div>
 </template>
 
 <script setup>
+
 // Page metadata
 definePageMeta({
-  layout: false,
-  title: 'Login - Loja Editora Sabia'
+  layout: 'login',
+  title: 'Login - Editora Sabia'
 })
 
 // Composables
