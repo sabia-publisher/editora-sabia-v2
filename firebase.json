@@ -1,4 +1,8 @@
 {
+  "functions": {
+    "source": "apps/website/.output/server",
+    "codebase": "website-ssr"
+  },
   "hosting": [
     {
       "target": "website",
@@ -11,7 +15,7 @@
       "rewrites": [
         {
           "source": "**",
-          "destination": "/index.html"
+          "function": "server"
         }
       ],
       "headers": [

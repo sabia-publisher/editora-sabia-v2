@@ -9,10 +9,10 @@ export default defineNuxtConfig({
     configPath: '../../packages/tailwind-config/tailwind.config.js'
   },
   devServer: {
-    port: 3002
+    port: 3000
   },
+  ssr: true,
   nitro: {
-    preset: 'static'
-  },
-  ssr: false
+    preset: 'firebase'
+  }
 }) 

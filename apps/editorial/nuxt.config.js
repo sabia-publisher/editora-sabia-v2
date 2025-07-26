@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     configPath: '../../packages/tailwind-config/tailwind.config.js'
   },
   devServer: {
-    port: 3001
+    port: 3002
   },
   nitro: {
     preset: 'static'

@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     configPath: '../../packages/tailwind-config/tailwind.config.js'
   },
   devServer: {
-    port: 3000
+    port: 3001
   },
   ssr: false
 }) 
